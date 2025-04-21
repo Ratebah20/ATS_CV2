@@ -1,0 +1,78 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Bienvenue - Portail de Recrutement{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded">
+    <h1 class="display-4">Bienvenue sur notre portail de recrutement</h1>
+    <p class="lead">Découvrez les opportunités de carrière et rejoignez notre équipe.</p>
+    <hr class="my-4">
+    <p>Parcourez nos offres d'emploi et postulez en quelques clics.</p>
+    <a class="btn btn-primary btn-lg" href="{{ url_for('jobs.list_jobs') }}" role="button">
+        <i class="fas fa-search"></i> Voir les offres
+    </a>
+</div>
+
+<h2 class="mt-5 mb-4">Nos offres récentes</h2>
+
+{% if jobs %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for job in jobs %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ job.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Publié le {{ job.created_at.strftime('%d/%m/%Y') }}</h6>
+                <p class="card-text">{{ job.description|truncate(150) }}</p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{{ url_for('jobs.job_details', job_id=job.id) }}" class="btn btn-outline-primary">
+                    <i class="fas fa-info-circle"></i> Détails
+                </a>
+                <a href="{{ url_for('application.apply', job_id=job.id) }}" class="btn btn-primary float-end">
+                    <i class="fas fa-paper-plane"></i> Postuler
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> Aucune offre d'emploi disponible pour le moment. Veuillez vérifier ultérieurement.
+</div>
+{% endif %}
+
+<div class="mt-5 p-4 bg-light rounded">
+    <h3>Pourquoi nous rejoindre ?</h3>
+    <div class="row mt-4">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Équipe dynamique</h5>
+                    <p class="card-text">Rejoignez une équipe passionnée et collaborative.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Évolution de carrière</h5>
+                    <p class="card-text">Des opportunités d'évolution et de formation continue.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-balance-scale fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Équilibre de vie</h5>
+                    <p class="card-text">Un environnement qui respecte l'équilibre travail-vie personnelle.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

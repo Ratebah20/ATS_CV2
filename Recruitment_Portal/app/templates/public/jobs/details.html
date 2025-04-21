@@ -1,0 +1,68 @@
+{% extends 'public/base.html' %}
+
+{% block title %}{{ job.title }} - Portail de Recrutement{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('public.index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('jobs.list_jobs') }}">Offres d'emploi</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ job.title }}</li>
+    </ol>
+</nav>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h1 class="card-title">{{ job.title }}</h1>
+        <h6 class="card-subtitle mb-3 text-muted">Publié le {{ job.created_at.strftime('%d/%m/%Y') }}</h6>
+        
+        <h4 class="mt-4">Description du poste</h4>
+        <div class="card-text mb-4">{{ job.description|nl2br }}</div>
+        
+        <h4>Compétences requises</h4>
+        <div class="card-text mb-4">{{ job.requirements|nl2br }}</div>
+        
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('application.apply', job_id=job.id) }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane"></i> Postuler à cette offre
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Process de recrutement</h4>
+        <div class="row mt-4">
+            <div class="col-md-3 mb-3 text-center">
+                <div class="bg-light p-3 rounded h-100">
+                    <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
+                    <h5>1. Candidature</h5>
+                    <p class="mb-0">Soumettez votre CV et lettre de motivation</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 text-center">
+                <div class="bg-light p-3 rounded h-100">
+                    <i class="fas fa-phone fa-2x text-primary mb-3"></i>
+                    <h5>2. Entretien téléphonique</h5>
+                    <p class="mb-0">Premier échange avec notre équipe RH</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 text-center">
+                <div class="bg-light p-3 rounded h-100">
+                    <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                    <h5>3. Entretien technique</h5>
+                    <p class="mb-0">Rencontre avec l'équipe et test technique</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 text-center">
+                <div class="bg-light p-3 rounded h-100">
+                    <i class="fas fa-handshake fa-2x text-primary mb-3"></i>
+                    <h5>4. Offre d'embauche</h5>
+                    <p class="mb-0">Proposition et intégration</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

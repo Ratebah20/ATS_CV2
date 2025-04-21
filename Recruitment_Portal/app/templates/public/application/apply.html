@@ -1,0 +1,114 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Postuler: {{ job.title }} - Portail de Recrutement{% endblock %}
+
+{% block extra_css %}
+<style>
+    .required-field::after {
+        content: "*";
+        color: red;
+        margin-left: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url_for('public.index') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('jobs.job_details', job_id=job.id) }}">{{ job.title }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Postuler</li>
+    </ol>
+</nav>
+
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">Postuler pour : {{ job.title }}</h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <h4 class="mb-3">Informations personnelles</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.first_name.id }}" class="form-label required-field">Prénom</label>
+                        {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+                        {% if form.first_name.errors %}
+                            {% for error in form.first_name.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.last_name.id }}" class="form-label required-field">Nom</label>
+                        {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+                        {% if form.last_name.errors %}
+                            {% for error in form.last_name.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.email.id }}" class="form-label required-field">Email</label>
+                        {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="exemple@email.com") }}
+                        {% if form.email.errors %}
+                            {% for error in form.email.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="{{ form.phone.id }}" class="form-label">Téléphone</label>
+                        {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else ""), placeholder="+33 6 12 34 56 78") }}
+                        {% if form.phone.errors %}
+                            {% for error in form.phone.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="mt-4 mb-3">Documents</h4>
+            <div class="form-group mb-3">
+                <label for="{{ form.cv.id }}" class="form-label required-field">CV (Format PDF uniquement)</label>
+                {{ form.cv(class="form-control" + (" is-invalid" if form.cv.errors else "")) }}
+                {% if form.cv.errors %}
+                    {% for error in form.cv.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+                <div class="form-text">Merci de télécharger votre CV au format PDF (taille max : 16 MB)</div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="{{ form.cover_letter.id }}" class="form-label">Lettre de motivation</label>
+                {{ form.cover_letter(class="form-control" + (" is-invalid" if form.cover_letter.errors else ""), rows=6) }}
+                {% if form.cover_letter.errors %}
+                    {% for error in form.cover_letter.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
+            <div class="form-group mt-4">
+                <p><small>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires.</small></p>
+                <p class="text-muted">En soumettant votre candidature, vous acceptez que vos données personnelles soient traitées conformément à notre politique de confidentialité.</p>
+                {{ form.submit(class="btn btn-primary btn-lg") }}
+                <a href="{{ url_for('jobs.job_details', job_id=job.id) }}" class="btn btn-outline-secondary">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

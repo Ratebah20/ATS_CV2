@@ -1,0 +1,14 @@
+COLUMN_NAME                                                                                                                     
+--------------------------------------------------------------------------------------------------------------------------------
+id                                                                                                                              
+candidate_id                                                                                                                    
+job_position_id                                                                                                                 
+cv_filename                                                                                                                     
+cover_letter                                                                                                                    
+status_id                                                                                                                       
+ai_analysis                                                                                                                     
+ai_score                                                                                                                        
+created_at                                                                                                                      
+updated_at                                                                                                                      
+
+(10 lignes affectées)

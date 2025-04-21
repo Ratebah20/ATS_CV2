@@ -1,0 +1,10 @@
+id          username                                                                                             password_preview               role_id    
+----------- ---------------------------------------------------------------------------------------------------- ------------------------------ -----------
+          1 admin                                                                                                $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           1
+          2 manager_info                                                                                         $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           2
+          3 manager_marketing                                                                                    $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           2
+          4 manager_rh                                                                                           $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           2
+          5 manager_finance                                                                                      $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           2
+          6 manager_rd                                                                                           $2b$12$tPRbXMBGxhvB5ORNrGFAYuX           2
+
+(6 lignes affectées)
