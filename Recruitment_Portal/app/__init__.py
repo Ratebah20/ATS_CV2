@@ -90,10 +90,12 @@ def create_app():
             cursor.execute("SET NOCOUNT ON")
             cursor.commit()
             
-            # Indiquer au driver pyodbc de ne pas tenter de convertir les types de données automatiquement
-            dbapi_connection.setdecoding(pyodbc.SQL_CHAR, encoding='utf-8')
-            dbapi_connection.setdecoding(pyodbc.SQL_WCHAR, encoding='utf-8')
-            dbapi_connection.setencoding(encoding='utf-8')
+            # Configurer l'encodage pour gérer correctement les caractères spéciaux
+            dbapi_connection.setdecoding(pyodbc.SQL_CHAR, encoding='latin1')
+            dbapi_connection.setdecoding(pyodbc.SQL_WCHAR, encoding='utf-16le')
+            dbapi_connection.setdecoding(pyodbc.SQL_WMETADATA, encoding='utf-16le')
+            dbapi_connection.setencoding(encoding='latin1', ctype=pyodbc.SQL_CHAR)
+            dbapi_connection.setencoding(encoding='utf-16le', ctype=pyodbc.SQL_WCHAR)
         
         # Créer les tables si elles n'existent pas déjà
         try:
