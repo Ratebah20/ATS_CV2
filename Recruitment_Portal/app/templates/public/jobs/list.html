@@ -1,28 +1,43 @@
 {% extends 'public/base.html' %}
 
-{% block title %}Offres d'emploi - Portail de Recrutement{% endblock %}
+{% block title %}Offres d'emploi - Portail Carrières Orange Luxembourg{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Nos offres d'emploi</h1>
+<div class="container-fluid py-5 bg-lighter-gray rounded-3 mb-5">
+    <div class="row justify-content-center text-center">
+        <div class="col-lg-8">
+            <h1 class="display-5 fw-bold mb-3">Découvrez nos opportunités de carrière</h1>
+            <p class="lead mb-4">Rejoignez Orange Luxembourg et participez à la transformation numérique au cœur de l'Europe.</p>
+        </div>
+    </div>
+</div>
 
 {% if jobs %}
-<div class="row row-cols-1 g-4">
+<div class="row row-cols-1 row-cols-md-2 g-4">
     {% for job in jobs %}
     <div class="col">
-        <div class="card">
+        <div class="card h-100 job-card border-0 shadow-sm">
+            <div class="card-header bg-orange text-white py-3">
+                <h3 class="card-title h5 mb-0">{{ job.title }}</h3>
+            </div>
             <div class="card-body">
-                <h3 class="card-title">{{ job.title }}</h3>
-                <h6 class="card-subtitle mb-3 text-muted">Publié le {{ job.created_at.strftime('%d/%m/%Y') }}</h6>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-light text-dark"><i class="far fa-calendar-alt me-1"></i> Publié le {{ job.created_at.strftime('%d/%m/%Y') }}</span>
+                    <span class="badge bg-light text-dark"><i class="fas fa-map-marker-alt me-1"></i> Luxembourg</span>
+                </div>
                 
-                <h5>Description du poste</h5>
-                <div class="card-text mb-3">{{ job.description|nl2br }}</div>
+                <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-info-circle me-2"></i>Aperçu du poste</h5>
+                <div class="card-text mb-4 job-description">{{ (job.description[:200] + '...' if job.description|length > 200 else job.description)|nl2br }}</div>
                 
-                <h5>Compétences requises</h5>
-                <div class="card-text mb-3">{{ job.requirements|nl2br }}</div>
+                <h5 class="border-bottom pb-2 mb-3"><i class="fas fa-check-circle me-2"></i>Compétences clés</h5>
+                <div class="card-text mb-4 job-requirements">{{ (job.requirements[:150] + '...' if job.requirements|length > 150 else job.requirements)|nl2br }}</div>
                 
-                <div class="mt-4">
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('jobs.job_details', job_id=job.id) }}" class="btn btn-outline-primary">
+                        <i class="fas fa-eye"></i> Voir détails
+                    </a>
                     <a href="{{ url_for('application.apply', job_id=job.id) }}" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Postuler maintenant
+                        <i class="fas fa-paper-plane"></i> Postuler
                     </a>
                 </div>
             </div>
@@ -31,8 +46,12 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="alert alert-info">
-    <i class="fas fa-info-circle"></i> Aucune offre d'emploi disponible pour le moment. Veuillez vérifier ultérieurement.
+<div class="alert alert-info p-4 d-flex align-items-center shadow-sm">
+    <i class="fas fa-info-circle fa-2x me-3"></i>
+    <div>
+        <h4 class="alert-heading">Aucune offre disponible</h4>
+        <p class="mb-0">Nous n'avons pas d'offres d'emploi disponibles pour le moment. Veuillez vérifier ultérieurement ou <a href="#" class="alert-link">créer une alerte</a> pour être informé des nouvelles opportunités.</p>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

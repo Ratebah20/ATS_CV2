@@ -1,40 +1,154 @@
 {% extends 'public/base.html' %}
 
-{% block title %}Postuler: {{ job.title }} - Portail de Recrutement{% endblock %}
+{% block title %}Postuler: {{ job.title }} - Portail Carrières Orange Luxembourg{% endblock %}
 
 {% block extra_css %}
 <style>
     .required-field::after {
         content: "*";
-        color: red;
+        color: var(--orange-primary);
         margin-left: 3px;
+        font-weight: bold;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: var(--orange-primary);
+        box-shadow: 0 0 0 0.25rem var(--orange-focus-shadow);
+    }
+    
+    .custom-file-upload {
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+        padding: 2rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
+    }
+    
+    .custom-file-upload:hover {
+        border-color: var(--orange-primary);
+        background-color: var(--orange-light-tint);
+    }
+    
+    .file-icon {
+        font-size: 2rem;
+        color: var(--orange-primary);
+        margin-bottom: 1rem;
+    }
+    
+    .application-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .application-steps::before {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: #ddd;
+        z-index: 0;
+    }
+    
+    .step {
+        position: relative;
+        z-index: 1;
+        background-color: white;
+        padding: 0 1rem;
+        text-align: center;
+    }
+    
+    .step-icon {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background-color: #f8f9fa;
+        border: 2px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.5rem;
+        font-size: 1.5rem;
+        color: #666;
+    }
+    
+    .step.active .step-icon {
+        background-color: var(--orange-primary);
+        border-color: var(--orange-primary);
+        color: white;
+    }
+    
+    .step.active .step-text {
+        color: var(--orange-primary);
+        font-weight: 600;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ url_for('public.index') }}">Accueil</a></li>
+<!-- Fil d'Ariane stylisé -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb bg-lighter-gray p-3 rounded shadow-sm">
+        <li class="breadcrumb-item"><a href="{{ url_for('public.index') }}"><i class="fas fa-home"></i> Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('jobs.list_jobs') }}"><i class="fas fa-briefcase"></i> Offres d'emploi</a></li>
         <li class="breadcrumb-item"><a href="{{ url_for('jobs.job_details', job_id=job.id) }}">{{ job.title }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Postuler</li>
     </ol>
 </nav>
 
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">Postuler pour : {{ job.title }}</h3>
+<!-- Étapes de candidature -->
+<div class="application-steps mb-5">
+    <div class="step active">
+        <div class="step-icon">
+            <i class="fas fa-edit"></i>
+        </div>
+        <div class="step-text">Formulaire</div>
     </div>
-    <div class="card-body">
+    <div class="step">
+        <div class="step-icon">
+            <i class="fas fa-file-upload"></i>
+        </div>
+        <div class="step-text">Documents</div>
+    </div>
+    <div class="step">
+        <div class="step-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="step-text">Confirmation</div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-5">
+    <div class="card-header bg-orange text-white py-3">
+        <h3 class="mb-0"><i class="fas fa-paper-plane me-2"></i>Postuler pour : {{ job.title }}</h3>
+    </div>
+    <div class="card-body p-4">
+        <div class="alert alert-light border-start border-4 border-orange mb-4 shadow-sm">
+            <div class="d-flex">
+                <div class="me-3">
+                    <i class="fas fa-info-circle text-orange fa-2x"></i>
+                </div>
+                <div>
+                    <h5 class="alert-heading">Conseils pour votre candidature</h5>
+                    <p class="mb-0">Assurez-vous que votre CV est à jour et met en avant vos compétences pertinentes pour ce poste. Une lettre de motivation personnalisée augmentera vos chances d'être sélectionné.</p>
+                </div>
+            </div>
+        </div>
+        
         <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             
-            <h4 class="mb-3">Informations personnelles</h4>
-            <div class="row mb-3">
+            <h4 class="border-bottom border-2 pb-2 mb-4"><i class="fas fa-user-circle me-2 text-orange"></i>Informations personnelles</h4>
+            <div class="row mb-4 g-3">
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="{{ form.first_name.id }}" class="form-label required-field">Prénom</label>
-                        {{ form.first_name(class="form-control" + (" is-invalid" if form.first_name.errors else "")) }}
+                        {{ form.first_name(class="form-control form-control-lg" + (" is-invalid" if form.first_name.errors else ""), placeholder="Votre prénom") }}
                         {% if form.first_name.errors %}
                             {% for error in form.first_name.errors %}
                                 <div class="invalid-feedback">{{ error }}</div>
@@ -43,9 +157,9 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="{{ form.last_name.id }}" class="form-label required-field">Nom</label>
-                        {{ form.last_name(class="form-control" + (" is-invalid" if form.last_name.errors else "")) }}
+                        {{ form.last_name(class="form-control form-control-lg" + (" is-invalid" if form.last_name.errors else ""), placeholder="Votre nom") }}
                         {% if form.last_name.errors %}
                             {% for error in form.last_name.errors %}
                                 <div class="invalid-feedback">{{ error }}</div>
@@ -55,11 +169,14 @@
                 </div>
             </div>
             
-            <div class="row mb-3">
+            <div class="row mb-4 g-3">
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="{{ form.email.id }}" class="form-label required-field">Email</label>
-                        {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), placeholder="exemple@email.com") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-envelope"></i></span>
+                            {{ form.email(class="form-control form-control-lg" + (" is-invalid" if form.email.errors else ""), placeholder="exemple@email.com") }}
+                        </div>
                         {% if form.email.errors %}
                             {% for error in form.email.errors %}
                                 <div class="invalid-feedback">{{ error }}</div>
@@ -68,9 +185,12 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group mb-3">
+                    <div class="form-group">
                         <label for="{{ form.phone.id }}" class="form-label">Téléphone</label>
-                        {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else ""), placeholder="+33 6 12 34 56 78") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fas fa-phone"></i></span>
+                            {{ form.phone(class="form-control form-control-lg" + (" is-invalid" if form.phone.errors else ""), placeholder="+352 123 456 789") }}
+                        </div>
                         {% if form.phone.errors %}
                             {% for error in form.phone.errors %}
                                 <div class="invalid-feedback">{{ error }}</div>
@@ -80,35 +200,123 @@
                 </div>
             </div>
             
-            <h4 class="mt-4 mb-3">Documents</h4>
-            <div class="form-group mb-3">
-                <label for="{{ form.cv.id }}" class="form-label required-field">CV (Format PDF uniquement)</label>
-                {{ form.cv(class="form-control" + (" is-invalid" if form.cv.errors else "")) }}
-                {% if form.cv.errors %}
-                    {% for error in form.cv.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                {% endif %}
-                <div class="form-text">Merci de télécharger votre CV au format PDF (taille max : 16 MB)</div>
+            <h4 class="border-bottom border-2 pb-2 mb-4 mt-5"><i class="fas fa-file-alt me-2 text-orange"></i>Documents</h4>
+            
+            <div class="row mb-4 g-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.cv.id }}" class="form-label required-field mb-2">CV (Format PDF uniquement)</label>
+                        <div class="custom-file-upload mb-2" id="cv-upload-container">
+                            <i class="fas fa-file-pdf file-icon"></i>
+                            <p class="mb-2">Glissez votre CV ici ou cliquez pour parcourir</p>
+                            <small class="text-muted">Format PDF - Taille max: 16 MB</small>
+                            {{ form.cv(class="form-control d-none" + (" is-invalid" if form.cv.errors else ""), id="cv-file-input") }}
+                        </div>
+                        <div id="cv-file-selected" class="d-none alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i> <span id="cv-filename">Fichier sélectionné</span>
+                        </div>
+                        {% if form.cv.errors %}
+                            {% for error in form.cv.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group h-100">
+                        <label for="{{ form.cover_letter.id }}" class="form-label mb-2">Lettre de motivation</label>
+                        {{ form.cover_letter(class="form-control h-100" + (" is-invalid" if form.cover_letter.errors else ""), rows=8, placeholder="Décrivez brièvement pourquoi vous êtes intéressé par ce poste et ce que vous pouvez apporter à notre équipe...") }}
+                        {% if form.cover_letter.errors %}
+                            {% for error in form.cover_letter.errors %}
+                                <div class="invalid-feedback">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
             
-            <div class="form-group mb-3">
-                <label for="{{ form.cover_letter.id }}" class="form-label">Lettre de motivation</label>
-                {{ form.cover_letter(class="form-control" + (" is-invalid" if form.cover_letter.errors else ""), rows=6) }}
-                {% if form.cover_letter.errors %}
-                    {% for error in form.cover_letter.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                {% endif %}
+            <div class="card bg-lighter-gray border-0 p-3 mb-4 mt-4">
+                <div class="card-body">
+                    <h5><i class="fas fa-shield-alt me-2 text-orange"></i>Protection des données</h5>
+                    <p class="mb-0">En soumettant votre candidature, vous acceptez que vos données personnelles soient traitées conformément à notre <a href="#" class="text-decoration-underline">politique de confidentialité</a>. Vos informations seront utilisées uniquement dans le cadre du processus de recrutement.</p>
+                </div>
             </div>
             
-            <div class="form-group mt-4">
-                <p><small>Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires.</small></p>
-                <p class="text-muted">En soumettant votre candidature, vous acceptez que vos données personnelles soient traitées conformément à notre politique de confidentialité.</p>
-                {{ form.submit(class="btn btn-primary btn-lg") }}
-                <a href="{{ url_for('jobs.job_details', job_id=job.id) }}" class="btn btn-outline-secondary">Annuler</a>
+            <div class="form-group mt-4 text-center">
+                <p><small>Les champs marqués d'un <span class="text-orange fw-bold">*</span> sont obligatoires.</small></p>
+                <div class="mt-4">
+                    {{ form.submit(class="btn btn-primary btn-lg px-5 py-3", value="Envoyer ma candidature") }}
+                    <a href="{{ url_for('jobs.job_details', job_id=job.id) }}" class="btn btn-outline-secondary btn-lg">Annuler</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Gestion du téléchargement du CV
+        const cvInput = document.getElementById('cv-file-input');
+        const cvContainer = document.getElementById('cv-upload-container');
+        const cvSelected = document.getElementById('cv-file-selected');
+        const cvFilename = document.getElementById('cv-filename');
+        
+        cvContainer.addEventListener('click', function() {
+            cvInput.click();
+        });
+        
+        cvInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                cvFilename.textContent = this.files[0].name;
+                cvSelected.classList.remove('d-none');
+                cvContainer.classList.add('border-success');
+            }
+        });
+        
+        // Prévention du comportement par défaut pour le drag & drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            cvContainer.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Highlight pendant le drag
+        ['dragenter', 'dragover'].forEach(eventName => {
+            cvContainer.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            cvContainer.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            cvContainer.classList.add('border-primary', 'bg-light');
+        }
+        
+        function unhighlight() {
+            cvContainer.classList.remove('border-primary', 'bg-light');
+        }
+        
+        // Drop handling
+        cvContainer.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            cvInput.files = files;
+            
+            if (files && files[0]) {
+                cvFilename.textContent = files[0].name;
+                cvSelected.classList.remove('d-none');
+                cvContainer.classList.add('border-success');
+            }
+        }
+    });
+</script>
 {% endblock %}

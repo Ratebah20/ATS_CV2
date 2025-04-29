@@ -1,60 +1,215 @@
 {% extends 'public/base.html' %}
 
-{% block title %}Candidature envoyée - Portail de Recrutement{% endblock %}
+{% block title %}Candidature envoyée - Portail Carrières Orange Luxembourg{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-icon {
+        width: 120px;
+        height: 120px;
+        background-color: #e8f7ee;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        color: #28a745;
+        font-size: 3rem;
+        box-shadow: 0 10px 20px rgba(40, 167, 69, 0.15);
+    }
+    
+    .step-card {
+        border-radius: 0.5rem;
+        border: none;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .step-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .step-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+    }
+    
+    .step-number {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--orange-primary);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+    
+    .confirmation-header {
+        background-color: var(--lighter-gray);
+        border-radius: 0.5rem;
+        padding: 3rem 2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+    
+    .confirmation-title {
+        color: var(--orange-primary);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+    }
+    
+    .contact-card {
+        border-left: 5px solid var(--orange-primary);
+        background-color: white;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card text-center">
-    <div class="card-body py-5">
-        <div class="mb-4">
-            <i class="fas fa-check-circle text-success fa-5x"></i>
+<!-- Étapes de candidature -->
+<div class="application-steps mb-5">
+    <div class="step">
+        <div class="step-icon">
+            <i class="fas fa-edit"></i>
         </div>
-        <h2 class="card-title">Candidature envoyée avec succès !</h2>
-        <p class="card-text lead">
-            Merci d'avoir postulé au poste de <strong>{{ job.title }}</strong>.
-        </p>
-        <p class="card-text">
-            Votre candidature a été enregistrée et sera examinée par notre équipe de recrutement.
-            Nous vous contacterons prochainement pour la suite du processus.
-        </p>
-        <p class="card-text text-muted">
-            Un email de confirmation a été envoyé à l'adresse que vous avez fournie.
-        </p>
-        <div class="mt-4">
-            <a href="{{ url_for('public.index') }}" class="btn btn-primary">Retour à l'accueil</a>
-            <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary ms-2">Voir d'autres offres</a>
+        <div class="step-text">Formulaire</div>
+    </div>
+    <div class="step">
+        <div class="step-icon">
+            <i class="fas fa-file-upload"></i>
         </div>
+        <div class="step-text">Documents</div>
+    </div>
+    <div class="step active">
+        <div class="step-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="step-text">Confirmation</div>
     </div>
 </div>
 
-<div class="card mt-4">
-    <div class="card-header">
-        Étapes suivantes
+<!-- En-tête de confirmation -->
+<div class="confirmation-header shadow-sm">
+    <div class="success-icon">
+        <i class="fas fa-check"></i>
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4 text-center mb-3">
-                <i class="fas fa-search fa-2x text-primary mb-3"></i>
-                <h5>Examen de votre dossier</h5>
-                <p>Notre équipe RH va étudier votre candidature</p>
-            </div>
-            <div class="col-md-4 text-center mb-3">
-                <i class="fas fa-phone fa-2x text-primary mb-3"></i>
-                <h5>Première prise de contact</h5>
-                <p>Si votre profil correspond, nous vous contacterons</p>
-            </div>
-            <div class="col-md-4 text-center mb-3">
-                <i class="fas fa-calendar-alt fa-2x text-primary mb-3"></i>
-                <h5>Entretien</h5>
-                <p>Organisation d'un entretien pour mieux vous connaître</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="alert alert-info mt-4">
-    <p class="mb-0">
-        <i class="fas fa-info-circle"></i> 
-        Si vous avez des questions concernant votre candidature, n'hésitez pas à nous contacter à <strong>recrutement@entreprise.com</strong>
+    <h1 class="confirmation-title display-5">Candidature envoyée avec succès !</h1>
+    <p class="lead mb-4">
+        Merci d'avoir postulé au poste de <strong>{{ job.title }}</strong>.
     </p>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <p class="card-text">
+                        Votre candidature a été enregistrée et sera examinée par notre équipe de recrutement.
+                        Nous vous contacterons prochainement pour la suite du processus.
+                    </p>
+                    <div class="alert alert-light border-start border-4 border-orange mt-3 mb-0">
+                        <i class="fas fa-envelope me-2 text-orange"></i>
+                        Un email de confirmation a été envoyé à l'adresse que vous avez fournie.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('public.index') }}" class="btn btn-primary btn-lg px-4">
+            <i class="fas fa-home me-2"></i> Retour à l'accueil
+        </a>
+        <a href="{{ url_for('jobs.list_jobs') }}" class="btn btn-outline-primary btn-lg ms-3 px-4">
+            <i class="fas fa-briefcase me-2"></i> Voir d'autres offres
+        </a>
+    </div>
+</div>
+
+<!-- Étapes suivantes -->
+<div class="card border-0 shadow-sm mb-5">
+    <div class="card-header bg-dark-gray text-white py-3">
+        <h3 class="mb-0"><i class="fas fa-road me-2"></i>Prochaines étapes</h3>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card step-card shadow-sm p-4 text-center position-relative">
+                    <div class="step-number">1</div>
+                    <div class="step-icon bg-orange-light-tint text-orange">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Examen de votre dossier</h4>
+                    <p class="mb-0">Notre équipe RH va étudier attentivement votre candidature dans les prochains jours.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card step-card shadow-sm p-4 text-center position-relative">
+                    <div class="step-number">2</div>
+                    <div class="step-icon bg-orange-light-tint text-orange">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h4>Première prise de contact</h4>
+                    <p class="mb-0">Si votre profil correspond, nous vous contacterons pour un premier échange téléphonique.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card step-card shadow-sm p-4 text-center position-relative">
+                    <div class="step-number">3</div>
+                    <div class="step-icon bg-orange-light-tint text-orange">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Entretien</h4>
+                    <p class="mb-0">Organisation d'un entretien en présentiel ou à distance pour mieux vous connaître.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Carte de contact -->
+<div class="card contact-card shadow-sm mb-4">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center">
+            <div class="me-4 d-none d-md-block">
+                <i class="fas fa-headset fa-3x text-orange"></i>
+            </div>
+            <div>
+                <h4 class="mb-2">Une question sur votre candidature ?</h4>
+                <p class="mb-0">
+                    Notre équipe de recrutement est à votre disposition. N'hésitez pas à nous contacter à <a href="mailto:recrutement.luxembourg@orange.com" class="fw-bold">recrutement.luxembourg@orange.com</a> ou par téléphone au <span class="fw-bold">+352 123 456 789</span>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Réseaux sociaux -->
+<div class="text-center mb-4">
+    <h5 class="mb-3">Suivez-nous sur les réseaux sociaux</h5>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="#" class="btn btn-outline-dark rounded-circle" title="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" class="btn btn-outline-dark rounded-circle" title="Twitter">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="btn btn-outline-dark rounded-circle" title="Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="btn btn-outline-dark rounded-circle" title="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
 </div>
 {% endblock %}
